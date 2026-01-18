@@ -15,6 +15,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: none !important; /* Hide system cursor */
         }
 
         html {
@@ -59,7 +60,7 @@
             pointer-events: none;
             z-index: 99999;
             transform: translate(-50%, -50%);
-            transition: width 0.2s ease, height 0.2s ease;
+            transition: width 0.2s ease, height 0.2s ease, transform 0.15s ease;
         }
 
         /* Light Mode Cursor - DARK & VISIBLE */
@@ -89,7 +90,7 @@
             pointer-events: none;
             z-index: 99998;
             transform: translate(-50%, -50%);
-            transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+            transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, transform 0.15s ease;
         }
 
         /* Light Mode Ring */
@@ -114,36 +115,68 @@
             height: 12px;
         }
 
-        /* Cursor Particles */
+        .cursor-ring.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+            border-width: 3px;
+        }
+
+        .cursor-dot.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        /* Cursor Trail Particles */
         .cursor-trail {
             position: fixed;
-            width: 6px;
-            height: 6px;
+            width: 4px;
+            height: 4px;
             border-radius: 50%;
             pointer-events: none;
             z-index: 99997;
             opacity: 0;
-            animation: trailFade 0.6s ease-out forwards;
+            animation: trailFade 0.8s ease-out forwards;
         }
 
         body .cursor-trail {
-            background: rgba(102, 126, 234, 0.6);
-            box-shadow: 0 0 15px rgba(102, 126, 234, 0.8);
+            background: rgba(102, 126, 234, 0.4);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
         }
 
         body.dark-mode .cursor-trail {
-            background: rgba(167, 139, 250, 0.6);
-            box-shadow: 0 0 15px rgba(167, 139, 250, 0.8);
+            background: rgba(167, 139, 250, 0.4);
+            box-shadow: 0 0 10px rgba(167, 139, 250, 0.6);
         }
 
         @keyframes trailFade {
             0% {
-                opacity: 1;
-                transform: scale(1);
+                opacity: 0.8;
+                transform: scale(1) translateY(0);
             }
             100% {
                 opacity: 0;
-                transform: scale(0.3);
+                transform: scale(0.3) translateY(10px);
+            }
+        }
+
+        /* Enhanced trail for name area */
+        .name-trail {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99996;
+            opacity: 0;
+            animation: nameTrailFade 1s ease-out forwards;
+        }
+
+        @keyframes nameTrailFade {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.2) translateY(20px);
             }
         }
 
@@ -345,7 +378,7 @@
             height: 60px;
             border-radius: 50%;
             border: none;
-            cursor: pointer;
+            cursor: none !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -418,7 +451,7 @@
         .logo {
             font-size: 28px;
             font-weight: 800;
-            cursor: pointer;
+            cursor: none !important;
             transition: transform 0.3s ease;
         }
 
@@ -452,7 +485,7 @@
             border-radius: 30px;
             transition: all 0.3s ease;
             font-weight: 500;
-            cursor: pointer;
+            cursor: none !important;
         }
 
         body .nav-links a {
@@ -476,7 +509,7 @@
         .mobile-menu-btn {
             display: none;
             font-size: 28px;
-            cursor: pointer;
+            cursor: none !important;
             padding: 8px;
         }
 
@@ -546,12 +579,14 @@
 
         .magnetic-letter {
             display: inline-block;
-            cursor: pointer;
+            cursor: none !important;
             position: relative;
             opacity: 0;
             transform: translateY(100px) rotateX(-90deg) scale(0.5);
             animation: letterAppear 1s forwards cubic-bezier(0.215, 0.61, 0.355, 1);
-            transition: filter 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                        color 0.4s ease,
+                        text-shadow 0.4s ease;
         }
 
         body .magnetic-letter.first-name {
@@ -589,12 +624,61 @@
             }
         }
 
-        body .magnetic-letter:hover {
-            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.8));
+        /* Professional hover effects for name */
+        .magnetic-letter.hovered {
+            transform: translate(var(--tx, 0), var(--ty, 0)) scale(1.15);
+            z-index: 100;
         }
 
-        body.dark-mode .magnetic-letter:hover {
-            filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.8));
+        body .magnetic-letter.first-name.hovered {
+            background: linear-gradient(135deg, #4d68e8 0%, #653b9e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        body.dark-mode .magnetic-letter.first-name.hovered {
+            background: linear-gradient(135deg, #9574f9 0%, #b074f9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 5px 20px rgba(167, 139, 250, 0.4);
+        }
+
+        body .magnetic-letter.last-name.hovered {
+            background: linear-gradient(135deg, #e883f9 0%, #f4475c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 5px 20px rgba(240, 147, 251, 0.4);
+        }
+
+        body.dark-mode .magnetic-letter.last-name.hovered {
+            background: linear-gradient(135deg, #d669f9 0%, #e23889 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 5px 20px rgba(232, 121, 249, 0.4);
+        }
+
+        .name-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 10;
+            transition: opacity 0.3s ease;
+        }
+
+        .name-glow.active {
+            opacity: 0.5;
         }
 
         .tagline {
@@ -644,7 +728,7 @@
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s ease;
-            cursor: pointer;
+            cursor: none !important;
             display: inline-block;
         }
 
@@ -858,7 +942,7 @@
             border-radius: 30px;
             text-align: center;
             transition: all 0.4s ease;
-            cursor: pointer;
+            cursor: none !important;
             backdrop-filter: blur(20px);
         }
 
@@ -1025,7 +1109,7 @@
             padding: 50px 40px;
             border-radius: 30px;
             transition: all 0.4s ease;
-            cursor: pointer;
+            cursor: none !important;
             backdrop-filter: blur(20px);
             position: relative;
             overflow: hidden;
@@ -1114,7 +1198,7 @@
             border-radius: 30px;
             overflow: hidden;
             transition: all 0.4s ease;
-            cursor: pointer;
+            cursor: none !important;
             backdrop-filter: blur(20px);
         }
 
@@ -1227,7 +1311,7 @@
             padding: 30px;
             border-radius: 25px;
             transition: all 0.3s ease;
-            cursor: pointer;
+            cursor: none !important;
             text-decoration: none;
             backdrop-filter: blur(20px);
         }
@@ -1335,6 +1419,7 @@
             outline: none;
             transition: all 0.3s ease;
             backdrop-filter: blur(20px);
+            cursor: none !important;
         }
 
         body .form-group input,
@@ -1378,7 +1463,7 @@
             border-radius: 20px;
             font-size: 17px;
             font-weight: 600;
-            cursor: pointer;
+            cursor: none !important;
             transition: all 0.3s ease;
             border: none;
             color: #ffffff;
@@ -1552,6 +1637,9 @@
     <div class="cursor-dot" id="cursorDot"></div>
     <div class="cursor-ring" id="cursorRing"></div>
 
+    <!-- Name Glow Effect -->
+    <div class="name-glow" id="nameGlow"></div>
+
     <!-- Theme Toggle -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <span id="themeIcon">🌙</span>
@@ -1608,7 +1696,7 @@
                 <div class="photo-ring-1"></div>
                 <div class="photo-ring-2"></div>
                 <div class="photo">
-                    <img src="https://media.licdn.com/dms/image/v2/D4D03AQGSfP_df49YSw/profile-displayphoto-shrink_800_800/B4DZWnCIRqH4Ac-/0/1742264109182?e=1768435200&v=beta&t=yRn6XcGhDPqPQkXKa3QP_8Kr9YDLeSaTEHToH9ZUSS8" alt="Roshan Thomas" onerror="this.src='https://via.placeholder.com/350x350/667eea/ffffff?text=RT'">
+                    <img src="https://avatars.githubusercontent.com/u/191464026?v=4">
                 </div>
             </div>
         </div>
@@ -1617,7 +1705,7 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">💼</div>
-                <div class="stat-value">5+</div>
+                <div class="stat-value">2+</div>
                 <div class="stat-label">Years Experience</div>
             </div>
             <div class="stat-card">
@@ -1627,7 +1715,7 @@
             </div>
             <div class="stat-card">
                 <div class="stat-icon">🏆</div>
-                <div class="stat-value">10+</div>
+                <div class="stat-value">2</div>
                 <div class="stat-label">Awards Won</div>
             </div>
             <div class="stat-card">
@@ -1734,95 +1822,86 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects">
-        <div class="section-header">
-            <span class="section-badge">🚀 Featured Work</span>
-            <h2 class="section-title">Recent Projects</h2>
-            <p class="section-description">
-                A showcase of my recent work, featuring modern web applications and creative solutions
-            </p>
-        </div>
-
-        <div class="projects-grid">
-            <div class="project-card">
-                <div class="project-image gradient-1">🛒</div>
-                <div class="project-content">
-                    <div class="project-title">E-Commerce Platform</div>
-                    <div class="project-description">A fully responsive e-commerce platform with advanced filtering, cart management, and payment integration.</div>
-                    <div class="project-tags">
-                        <span class="tag">React</span>
-                        <span class="tag">Next.js</span>
-                        <span class="tag">Stripe</span>
-                        <span class="tag">Tailwind</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-image gradient-2">🤖</div>
-                <div class="project-content">
-                    <div class="project-title">AI Dashboard</div>
-                    <div class="project-description">Interactive dashboard for visualizing AI-powered analytics with real-time data updates and beautiful charts.</div>
-                    <div class="project-tags">
-                        <span class="tag">TypeScript</span>
-                        <span class="tag">React</span>
-                        <span class="tag">D3.js</span>
-                        <span class="tag">Node.js</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-image gradient-3">🎨</div>
-                <div class="project-content">
-                    <div class="project-title">Portfolio Studio</div>
-                    <div class="project-description">A creative portfolio builder with drag-and-drop interface and customizable templates for creators.</div>
-                    <div class="project-tags">
-                        <span class="tag">React</span>
-                        <span class="tag">Motion</span>
-                        <span class="tag">Figma API</span>
-                        <span class="tag">MongoDB</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-image gradient-4">✅</div>
-                <div class="project-content">
-                    <div class="project-title">Task Management App</div>
-                    <div class="project-description">Collaborative task management tool with real-time updates, team chat, and project timelines.</div>
-                    <div class="project-tags">
-                        <span class="tag">React</span>
-                        <span class="tag">Firebase</span>
-                        <span class="tag">Redux</span>
-                        <span class="tag">Material-UI</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-image gradient-5">🌤️</div>
-                <div class="project-content">
-                    <div class="project-title">Weather Forecast</div>
-                    <div class="project-description">Beautiful weather application with animated backgrounds, detailed forecasts, and location tracking.</div>
-                    <div class="project-tags">
-                        <span class="tag">React</span>
-                        <span class="tag">API</span>
-                        <span class="tag">Geolocation</span>
-                        <span class="tag">CSS</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-image gradient-6">📊</div>
-                <div class="project-content">
-                    <div class="project-title">Social Media Dashboard</div>
-                    <div class="project-description">Unified dashboard for managing multiple social media accounts with analytics and scheduling.</div>
-                    <div class="project-tags">
-                        <span class="tag">Next.js</span>
-                        <span class="tag">OAuth</span>
-                        <span class="tag">Charts</span>
-                        <span class="tag">PostgreSQL</span>
-                    </div>
-                </div>
+<div class="projects-grid">
+    <div class="project-card">
+        <div class="project-image gradient-1">🤖</div>
+        <div class="project-content">
+            <div class="project-title">ARIS AI Research Agent</div>
+            <div class="project-description">Full-stack AI document understanding system for processing, analyzing, and summarizing complex research papers with NLP.</div>
+            <div class="project-tags">
+                <span class="tag">AI/ML</span>
+                <span class="tag">NLP</span>
+                <span class="tag">Full-Stack</span>
+                <span class="tag">Python</span>
             </div>
         </div>
+    </div>
+    <div class="project-card">
+        <div class="project-image gradient-2">🪐</div>
+        <div class="project-content">
+            <div class="project-title">Mars Explorer AI Suite</div>
+            <div class="project-description">Comprehensive AI suite for Mars terrain analysis, anomaly detection, and planetary data processing using computer vision.</div>
+            <div class="project-tags">
+                <span class="tag">Computer Vision</span>
+                <span class="tag">Space Tech</span>
+                <span class="tag">Data Science</span>
+                <span class="tag">Python</span>
+            </div>
+        </div>
+    </div>
+    <div class="project-card">
+        <div class="project-image gradient-3">🌍</div>
+        <div class="project-content">
+            <div class="project-title">Global Climate Risk Prediction AI</div>
+            <div class="project-description">ML system predicting climate risks using satellite data, environmental factors, and historical patterns for proactive planning.</div>
+            <div class="project-tags">
+                <span class="tag">Machine Learning</span>
+                <span class="tag">Climate Tech</span>
+                <span class="tag">Data Analysis</span>
+                <span class="tag">Python</span>
+            </div>
+        </div>
+    </div>
+    <div class="project-card">
+        <div class="project-image gradient-4">🎵</div>
+        <div class="project-content">
+            <div class="project-title">AI Exoplanet Transit Detector</div>
+            <div class="project-description">AI system for detecting exoplanet transits in astronomical data using deep learning and time-series analysis.</div>
+            <div class="project-tags">
+                <span class="tag">Deep Learning</span>
+                <span class="tag">Astronomy</span>
+                <span class="tag">Time Series</span>
+                <span class="tag">TensorFlow</span>
+            </div>
+        </div>
+    </div>
+    <div class="project-card">
+        <div class="project-image gradient-5">👁️</div>
+        <div class="project-content">
+            <div class="project-title">Space Vision Assistant</div>
+            <div class="project-description">AI-powered astronomical object classifier for identifying celestial bodies from images using computer vision.</div>
+            <div class="project-tags">
+                <span class="tag">Computer Vision</span>
+                <span class="tag">Image Processing</span>
+                <span class="tag">PyTorch</span>
+                <span class="tag">Astronomy</span>
+            </div>
+        </div>
+    </div>
+    <div class="project-card">
+        <div class="project-image gradient-6">💾</div>
+        <div class="project-content">
+            <div class="project-title">Database Management System</div>
+            <div class="project-description">Full-featured DBMS with data modeling, query optimization, transaction processing, and secure data management capabilities.</div>
+            <div class="project-tags">
+                <span class="tag">Database Design</span>
+                <span class="tag">SQL</span>
+                <span class="tag">Backend</span>
+                <span class="tag">System Design</span>
+            </div>
+        </div>
+    </div>
+</div>
 
         <div style="text-align: center;">
             <a href="https://github.com/roshanthm" target="_blank" class="btn btn-secondary" style="display: inline-block;">
@@ -1834,7 +1913,7 @@
     <!-- Contact Section -->
     <section id="contact">
         <div class="section-header">
-            <span class="section-badge">📬 Get In Touch</span>
+            <span class="section-badge"> Get In Touch</span>
             <h2 class="section-title">Let's Work Together</h2>
             <p class="section-description">
                 Have a project in mind? Let's create something amazing together
@@ -1843,11 +1922,11 @@
 
         <div class="contact-grid">
             <div class="contact-info">
-                <a href="mailto:hello@roshanthomas.com" class="contact-card">
+                <a href="mailto:roshanseplappadu@gmail.com" class="contact-card">
                     <div class="contact-icon">✉️</div>
                     <div class="contact-card-text">
                         <div class="contact-label">Email</div>
-                        <div class="contact-value">hello@roshanthomas.com</div>
+                        <div class="contact-value">roshansepkappadu@gmail.com</div>
                     </div>
                 </a>
 
@@ -1888,7 +1967,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>Crafted with <span class="footer-heart">❤️</span> by Roshan Thomas</p>
+        <p>Crafted<span class="footer-heart"></span> by Roshan Thomas</p>
         <p>© 2025 Roshan Thomas. All rights reserved.</p>
     </footer>
 
@@ -1933,7 +2012,7 @@
         });
 
         // ============================================
-        // CUSTOM CURSOR
+        // ENHANCED CUSTOM CURSOR WITH TRAIL
         // ============================================
         const cursorDot = document.getElementById('cursorDot');
         const cursorRing = document.getElementById('cursorRing');
@@ -1944,34 +2023,70 @@
         let ringY = window.innerHeight / 2;
         let isHovering = false;
         let trailCounter = 0;
+        let lastMouseX = mouseX;
+        let lastMouseY = mouseY;
+        let velocityX = 0;
+        let velocityY = 0;
 
+        // Enhanced mousemove tracking with velocity
         document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            velocityX = e.clientX - lastMouseX;
+            velocityY = e.clientY - lastMouseY;
+            
             mouseX = e.clientX;
             mouseY = e.clientY;
+            
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
 
-            // Cursor trail effect
+            // Create cursor trail effect
             trailCounter++;
-            if (trailCounter % 3 === 0) {  // Create trail every 3 mouse moves
-                createCursorTrail(mouseX, mouseY);
+            if (trailCounter % 2 === 0) {  // Create trail every 2 mouse moves
+                createCursorTrail(mouseX, mouseY, velocityX, velocityY);
             }
 
             // Check if hovering over interactive element
             const target = e.target;
-            isHovering = target.closest('a, button, .magnetic-letter, .stat-card, .skill-card, .project-card, .contact-card, input, textarea');
+            isHovering = target.closest('a, button, .stat-card, .skill-card, .project-card, .contact-card, input, textarea, .theme-toggle, .logo');
         });
 
-        function createCursorTrail(x, y) {
+        // Click effects
+        document.addEventListener('mousedown', () => {
+            cursorDot.classList.add('clicking');
+            cursorRing.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursorDot.classList.remove('clicking');
+            cursorRing.classList.remove('clicking');
+        });
+
+        // Enhanced cursor trail creation
+        function createCursorTrail(x, y, vx, vy) {
             const trail = document.createElement('div');
             trail.className = 'cursor-trail';
+            
+            // Calculate velocity magnitude for size variation
+            const speed = Math.min(Math.sqrt(vx * vx + vy * vy), 50);
+            const size = 4 + (speed / 15);
+            
+            trail.style.width = size + 'px';
+            trail.style.height = size + 'px';
             trail.style.left = x + 'px';
             trail.style.top = y + 'px';
+            
+            // Add some velocity-based opacity
+            trail.style.opacity = Math.min(0.6 + (speed / 100), 0.8);
+            
             document.body.appendChild(trail);
 
             setTimeout(() => {
                 trail.remove();
-            }, 600);
+            }, 800);
         }
 
+        // Enhanced cursor animation with momentum
         function animateCursor() {
             // Smooth follow for dot
             const dotSpeed = 0.25;
@@ -1981,9 +2096,14 @@
             cursorDot.style.left = dotX + 'px';
             cursorDot.style.top = dotY + 'px';
 
-            // Smooth follow for ring with delay
-            ringX += (mouseX - ringX) * 0.15;
-            ringY += (mouseY - ringY) * 0.15;
+            // Enhanced smooth follow for ring with spring effect
+            const ringSpeed = 0.15;
+            const dx = mouseX - ringX;
+            const dy = mouseY - ringY;
+            
+            // Add some momentum based on velocity
+            ringX += dx * ringSpeed + velocityX * 0.05;
+            ringY += dy * ringSpeed + velocityY * 0.05;
 
             cursorRing.style.left = ringX + 'px';
             cursorRing.style.top = ringY + 'px';
@@ -2017,60 +2137,173 @@
         }
 
         // ============================================
-        // MAGNETIC NAME ANIMATION
+        // PROFESSIONAL MAGNETIC NAME ANIMATION
         // ============================================
         const firstName = 'ROSHAN';
         const lastName = 'THOMAS';
+        const nameGlow = document.getElementById('nameGlow');
+        
+        // Store all letters for collective hover effect
+        let allLetters = [];
 
         function createMagneticLetters(text, container, startDelay, className) {
+            const letters = [];
+            
             text.split('').forEach((letter, index) => {
                 const span = document.createElement('span');
                 span.className = `magnetic-letter ${className}`;
                 span.textContent = letter;
                 span.style.animationDelay = (startDelay + index * 0.08) + 's';
 
-                let currentX = 0;
-                let currentY = 0;
-                let targetX = 0;
-                let targetY = 0;
-
-                document.addEventListener('mousemove', (e) => {
-                    const rect = span.getBoundingClientRect();
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-
-                    const distanceX = e.clientX - centerX;
-                    const distanceY = e.clientY - centerY;
-                    const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
-
-                    const magneticRadius = 150;
-
-                    if (distance < magneticRadius) {
-                        const strength = 1 - distance / magneticRadius;
-                        targetX = distanceX * strength * 0.35;
-                        targetY = distanceY * strength * 0.35;
-                    } else {
-                        targetX = 0;
-                        targetY = 0;
-                    }
-                });
-
-                function animateLetter() {
-                    currentX += (targetX - currentX) * 0.15;
-                    currentY += (targetY - currentY) * 0.15;
-
-                    span.style.transform = `translate(${currentX}px, ${currentY}px)`;
-
-                    requestAnimationFrame(animateLetter);
-                }
-                animateLetter();
-
+                letters.push(span);
                 container.appendChild(span);
             });
+            
+            return letters;
         }
 
-        createMagneticLetters(firstName, document.getElementById('firstName'), 0.5, 'first-name');
-        createMagneticLetters(lastName, document.getElementById('lastName'), 1.0, 'last-name');
+        // Create the name letters
+        const firstNameLetters = createMagneticLetters(firstName, document.getElementById('firstName'), 0.5, 'first-name');
+        const lastNameLetters = createMagneticLetters(lastName, document.getElementById('lastName'), 1.0, 'last-name');
+        allLetters = [...firstNameLetters, ...lastNameLetters];
+
+        // Name-specific trail effect
+        function createNameTrail(x, y, color) {
+            const trail = document.createElement('div');
+            trail.className = 'name-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            
+            if (color) {
+                trail.style.background = color;
+                trail.style.boxShadow = `0 0 15px ${color}`;
+            }
+            
+            document.body.appendChild(trail);
+
+            setTimeout(() => {
+                trail.remove();
+            }, 1000);
+        }
+
+        // Professional hover effect for the entire name
+        let nameTrailInterval;
+        let isMouseOverName = false;
+
+        document.addEventListener('mousemove', (e) => {
+            let isOverName = false;
+            let closestLetter = null;
+            let minDistance = Infinity;
+
+            // Find closest letter
+            allLetters.forEach(letter => {
+                const rect = letter.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                const distanceX = e.clientX - centerX;
+                const distanceY = e.clientY - centerY;
+                const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestLetter = letter;
+                }
+                
+                // Reset all letters
+                letter.classList.remove('hovered');
+                letter.style.setProperty('--tx', '0px');
+                letter.style.setProperty('--ty', '0px');
+            });
+
+            // Apply magnetic effect to closest letters within range
+            const magneticRadius = 120;
+            
+            allLetters.forEach(letter => {
+                const rect = letter.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                const distanceX = e.clientX - centerX;
+                const distanceY = e.clientY - centerY;
+                const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+
+                if (distance < magneticRadius) {
+                    isOverName = true;
+                    
+                    // Calculate pull strength (stronger when closer)
+                    const strength = 1 - (distance / magneticRadius);
+                    const maxPull = 15; // Subtle, professional movement
+                    
+                    // Calculate direction (away from cursor for clean effect)
+                    const angle = Math.atan2(distanceY, distanceX);
+                    const pullX = Math.cos(angle) * strength * maxPull;
+                    const pullY = Math.sin(angle) * strength * maxPull;
+                    
+                    // Apply transform
+                    letter.classList.add('hovered');
+                    letter.style.setProperty('--tx', `${pullX}px`);
+                    letter.style.setProperty('--ty', `${pullY}px`);
+                }
+            });
+
+            // Update name glow effect
+            if (isOverName && closestLetter) {
+                const rect = closestLetter.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                nameGlow.style.left = centerX + 'px';
+                nameGlow.style.top = centerY + 'px';
+                nameGlow.classList.add('active');
+                
+                // Set glow color based on which name
+                if (firstNameLetters.includes(closestLetter)) {
+                    nameGlow.style.background = 'radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%)';
+                } else {
+                    nameGlow.style.background = 'radial-gradient(circle, rgba(240, 147, 251, 0.3) 0%, transparent 70%)';
+                }
+                
+                // Create name trail effect
+                if (!isMouseOverName) {
+                    isMouseOverName = true;
+                    nameTrailInterval = setInterval(() => {
+                        createNameTrail(
+                            e.clientX + (Math.random() - 0.5) * 30,
+                            e.clientY + (Math.random() - 0.5) * 30,
+                            firstNameLetters.includes(closestLetter) 
+                                ? 'rgba(102, 126, 234, 0.3)' 
+                                : 'rgba(240, 147, 251, 0.3)'
+                        );
+                    }, 30);
+                }
+            } else {
+                nameGlow.classList.remove('active');
+                if (isMouseOverName) {
+                    isMouseOverName = false;
+                    clearInterval(nameTrailInterval);
+                }
+            }
+        });
+
+        // Smooth transition when mouse leaves name area
+        let nameHoverTimeout;
+        document.addEventListener('mousemove', () => {
+            clearTimeout(nameHoverTimeout);
+            
+            nameHoverTimeout = setTimeout(() => {
+                allLetters.forEach(letter => {
+                    letter.classList.remove('hovered');
+                    letter.style.setProperty('--tx', '0px');
+                    letter.style.setProperty('--ty', '0px');
+                });
+                nameGlow.classList.remove('active');
+                if (isMouseOverName) {
+                    isMouseOverName = false;
+                    clearInterval(nameTrailInterval);
+                }
+            }, 100);
+        });
 
         // ============================================
         // SMOOTH SCROLL
@@ -2117,6 +2350,7 @@
         // ============================================
         console.log('%c🚀 Portfolio by Roshan Thomas', 'font-size: 20px; font-weight: bold; color: #667eea;');
         console.log('%c✨ Designed & Developed with passion', 'font-size: 14px; color: #f093fb;');
+        console.log('%c🔮 Professional magnetic name animation with trail effects activated!', 'font-size: 12px; color: #764ba2;');
     </script>
 </body>
 </html>
